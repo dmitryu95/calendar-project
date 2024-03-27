@@ -1,53 +1,43 @@
 <template>
   <div class="main-form">
-    <month-layout
-        :year="$props.year"
-        :month="$props.month"
-        :lang = '$props.lang'
-        @setMonth = 'setMonth'
-        @setYear = 'setYear'/>
+    <month-and-year-layout
+        :date = 'date'
+        :lang = 'lang'
+        @setDate="setDate"/>
     <week-layout
-        :lang="$props.lang"/>
+        :lang="lang"/>
     <div class="days-grid">
       <day-layout
           v-for="day in gridDays"
-          :key="day"
-          :day="day"
-          :selectedDay="$props.selectedDay"
-          @setNowDate="setNowDate"/>
+          :key = "day"
+          :day = 'day'
+          @click="setDateToday(day)"/>
     </div>
   </div>
 </template>
 
 <script>
-import MonthLayout from './MonthLayout.vue'
 import WeekLayout from "@/components/WeekLayout.vue";
 import DayLayout from "@/components/DayLayout.vue";
+import MonthAndYearLayout from "@/components/MonthAndYearLayout.vue";
 
 export default {
   name: 'CalendarLayout',
   components: {
     DayLayout,
     WeekLayout,
-    MonthLayout
+    MonthAndYearLayout
   },
   props: {
-    year: {
-      required: true,
-      type: Number
-    },
-    month: {
-      required: true,
-      type: Number
+    date: {
+      year: Number,
+      month: Number,
+      day: Number
     },
     lang: {
       required: true,
       type: String
     },
-    selectedDay: {
-      required: true,
-      type: Number
-    }
   },
   data() {
     return {
@@ -68,27 +58,24 @@ export default {
         this.gridDays.push(i);
       }
     },
-    setMonth(month) {
-      this.$emit('setMonth', month)
+    setDate(date) {
+      this.$emit('setDate', date )
     },
-    setYear(year) {
-      this.$emit('setYear', year)
+    setDateToday(day) {
+      this.$emit('setDateToday', { day: day, month: this.date.month, year: this.date.year })
     },
-    setNowDate(day) {
-      this.$emit('setNowDate', day, this.month, this.year)
-    }
   },
   watch: {
-    month () {
-        this.setGridDays()
+    date() {
+      this.setGridDays();
     }
   },
   computed: {
     getCountDay() {
-      return new Date(this.year, this.month, 0).getDate();
+      return new Date(this.date.year, this.date.month, 0).getDate();
     },
     getStartWeekDay() {
-      return new Date(this.year, this.month-1, 1).getDay();
+      return new Date(this.date.year, this.date.month-1, 1).getDay();
     },
   }
 };

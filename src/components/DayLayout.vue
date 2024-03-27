@@ -1,7 +1,6 @@
 <template>
   <div class="day-form__item"
-       :class="{'empty': day === 0, 'some-value': day !== 0}"
-       @click="setNowDate(day)">
+       :class="day === 0 ? 'empty' : 'some-value'">
     {{ day }}
   </div>
 </template>
@@ -10,14 +9,8 @@
 export default {
   name: 'DayLayout',
   props: {
-    day: Number,
-    selectedDay: Number
+    day: Number
   },
-  methods: {
-    setNowDate(day) {
-      this.$emit('setNowDate', day)
-    }
-  }
 }
 </script>
 

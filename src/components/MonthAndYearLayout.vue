@@ -9,7 +9,7 @@
       <span>{{setMonthName}}</span>
     </div>
     <div>
-      <span>{{year}}</span>
+      <span>{{date.year}}</span>
     </div>
     <button class="scroll-date right"
       type="button"
@@ -22,21 +22,18 @@
 <script>
 import monthNames from '@/assets/MonthNames'
 export default {
-  name: 'MonthLayout',
+  name: 'MonthAndYearLayout',
   props: {
-    year: {
-      required: true,
-      type: Number
-    },
-    month: {
-      required: true,
-      type: Number
+    date: {
+      year: Number,
+      month: Number,
+      day: Number,
     },
     lang: String
   },
   methods: {
     setMonth(num, event) {
-      let selectedMonth = this.month + num;
+      let selectedMonth = this.date.month + num;
 
       if (selectedMonth < 0) {
         selectedMonth = 11;
@@ -44,30 +41,26 @@ export default {
         selectedMonth = 0;
       }
 
-      this.$emit('setMonth', selectedMonth);
-      this.setYear(event);
+      this.setYear(event, selectedMonth);
     },
-    setYear(event) {
-      let selectedYear = this.year
+    setYear(event, month) {
+      let year = this.date.year
 
-      if (event === 'next' && this.month === 0) {
-        selectedYear += 1
-      } else if (event === 'prev' && this.month === 1) {
-        selectedYear -= 1
+      if (event === 'next' && month === 0) {
+        year += 1
+      } else if (event === 'prev' && month === 1) {
+        year -= 1
       }
 
-      this.$emit('setYear', selectedYear);
+      this.$emit('setDate',{ day: this.date.day, month, year} );
     },
   },
   computed: {
     setMonthName() {
-      let nameMonth = new Date(this.year, this.month-1)
+      let nameMonth = new Date(this.date.year, this.date.month-1)
 
-      if(this.lang === 'ru') {
-        return monthNames[this.month]
-      }
-
-      return nameMonth.toLocaleString('default', { month: 'long' })
+      return this.lang === 'ru' ? monthNames[this.date.month] :
+          nameMonth.toLocaleString('default', { month: 'long' })
     },
   }
 }

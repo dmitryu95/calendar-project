@@ -1,41 +1,29 @@
 <template>
   <ul class="week-form__list">
     <li class="week-form__item"
-      v-if="lang === 'en'"
-      v-for="weekDay in daysEn"
-      :key="days">
-      {{ weekDay }}
-    </li>
-    <li class="week-form__item"
-        v-else
-        v-for="weekDay in daysRu"
-        :key="days">
+        v-for="weekDay in days"
+        :key="weekDay">
       {{ weekDay }}
     </li>
   </ul>
 </template>
 
 <script>
+import {WEEK_RU, WEEK_EN } from '@/assets/MonthNames'
 export default {
   name: 'WeekLayout',
-  data() {
-    return {
-      daysEn: [
-        'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
-      ],
-      daysRu: [
-        'ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'
-      ]
-    }
-  },
   props: {
     lang: "en" || "ru"
   },
+  computed: {
+    days() {
+      return (this.lang === 'en') ? WEEK_EN : WEEK_RU
+    }
+  }
 }
 </script>
 
 <style>
-
 .week-form__list {
   list-style-type: none;
   display: flex;
