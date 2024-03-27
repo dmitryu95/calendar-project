@@ -31,11 +31,11 @@ export default {
   props: {
     lang: "en" || "ru"
   },
-
 }
 </script>
 
 <style>
+
 .week-form__list {
   list-style-type: none;
   display: flex;
